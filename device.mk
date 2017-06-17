@@ -19,6 +19,20 @@ $(call inherit-product-if-exists, $(VENDOR_BLOBS))
 MTK_PROJECT_CONFIG ?= device/vernee/k11tc_a/ProjectConfig.mk
 include $(MTK_PROJECT_CONFIG)
 
+# Kernel
+ifeq ($(TARGET_PREBUILT_KERNEL),)
+	LOCAL_KERNEL := device/vernee/k11tc_a/prebuilts/kernel
+else
+	LOCAL_KERNEL := $(TARGET_PREBUILT_KERNEL)
+endif
+
+PRODUCT_COPY_FILES += \
+    $(LOCAL_KERNEL):kernel
+
+#Hack for prebuilt kernel
+$(shell mkdir -p $(OUT)/obj/KERNEL_OBJ/usr)
+$(shell touch $(OUT)/obj/KERNEL_OBJ/usr/export_includes)
+
 # Charger and USB
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
     ro.usb.vid=2970
